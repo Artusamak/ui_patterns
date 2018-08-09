@@ -107,7 +107,7 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
    * @param array $field
    *   Pattern config settings.
    */
-  protected function buildFieldGroupElements(&$element, $field) {
+  protected function buildFieldGroupElements(array &$element, array $field) {
     if ($field['plugin'] == 'fieldgroup') {
       $group_settings = $this->getSubFieldgroupPatternSettings($field);
 
@@ -133,7 +133,7 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
    * @return array
    *   Array of settings for the group.
    */
-  protected function getSubFieldgroupPatternSettings($field) {
+  protected function getSubFieldgroupPatternSettings(array $field) {
     $config_name_pieces = [];
 
     // Build the key name of the view display config that we will retrieve

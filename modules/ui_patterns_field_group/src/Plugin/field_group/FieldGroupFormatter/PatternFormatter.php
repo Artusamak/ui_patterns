@@ -87,13 +87,12 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function preRender(&$element, $rendering_object) {
-    $fields = [];
     $mapping = $this->getSetting('pattern_mapping');
     foreach ($mapping as $field) {
       $this->buildFieldGroupElements($element, $field);
-      $fields[$field['destination']][] = $element[$field['source']];
+      $element['#fields'][$field['destination']][] = $element[$field['source']];
     }
-    $this->determineConfigSettings($element, $this->getSetting('pattern'), $fields);
+    $this->determineConfigSettings($element, $this->getSetting('pattern'));
   }
 
   /**
@@ -115,14 +114,13 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
       $group_settings = $this->getSubFieldgroupPatternSettings($field);
 
       // Build pattern group children content.
-      $child_fields = [];
       foreach ($group_settings["format_settings"]["pattern_mapping"] as $child) {
         if ($child['plugin'] == 'fieldgroup') {
           $this->buildFieldGroupElements($element[$field['source']], $child);
         }
-        $child_fields[$child['destination']][] = $element[$field['source']][$child['source']];
+        $element[$field['source']]['#fields'][$child['destination']][] = $element[$field['source']][$child['source']];
       }
-      $this->determineConfigSettings($element[$field['source']], $group_settings['format_settings']['pattern'], $child_fields);
+      $this->determineConfigSettings($element[$field['source']], $group_settings['format_settings']['pattern']);
     }
     $element[$field['destination']][] = $element[$field['source']];
   }
@@ -167,9 +165,6 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
    *   Field data.
    * @param $pattern_id string
    *   Machine name of the pattern to load.
-   * @param $fields array
-   *   Array of renderable elements keyed by "regions" of the pattern where they
-   *   will be rendered and where values are renderable arrays.
    */
   protected function determineConfigSettings(&$element, $pattern_id, $fields) {
     $context['#id'] = $pattern_id;

@@ -163,9 +163,8 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
    * @param string $pattern_id
    *   Machine name of the pattern to load.
    */
-  protected function determineConfigSettings(&$element, $pattern_id, $fields) {
+  protected function determineConfigSettings(&$element, $pattern_id) {
     $context['#id'] = $pattern_id;
-    $context['#fields'] = $fields;
 
     $context['#type'] = 'pattern';
     $context['#multiple_sources'] = TRUE;
@@ -179,7 +178,7 @@ class PatternFormatter extends FieldGroupFormatterBase implements ContainerFacto
     $element['#context']['view_mode'] = $this->configuration['group']->mode;
 
     // Pass current entity to pattern context, if any.
-    $element['#context']['entity'] = $this->entityFinder->findEntityFromFields($fields);
+    $element['#context']['entity'] = $this->entityFinder->findEntityFromFields($element['#fields']);
   }
 
   /**
